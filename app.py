@@ -1,5 +1,5 @@
 import os
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, render_template
 from flask_cors import CORS
 
 from api.error_handlers import format_error
@@ -41,6 +41,3 @@ def instructions():
 
 
 from api.tax_calculator.routes import *
-
-if __name__ == '__main__':
-    app.run(debug=True)
