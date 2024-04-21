@@ -40,8 +40,20 @@ def test_tax_calculator_bad_annual_income_type(client):
     assert resp.json == {
         'errors': [{
             'field': 'annual_income',
-            'message': 'Annual_income must be a number',
+            'message': 'annual_income must be a number',
             'code': 'INVALID_ANNUAL_INCOME'
+        }]
+    }
+
+
+def test_tax_calculator_bad_annual_income_type(client):
+    resp = client.get('/tax-calculator/', query_string={'annual_income': -4, 'tax_year': 2021})
+    assert resp.status_code == 400
+    assert resp.json == {
+        'errors': [{
+            'field': 'annual_income',
+            'message': 'annual_income must be positive',
+            'code': 'SUB_ZERO_INCOME'
         }]
     }
 
