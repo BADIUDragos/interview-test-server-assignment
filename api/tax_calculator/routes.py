@@ -18,7 +18,7 @@ def tax_calculator_instructions():
             error_response = format_error(
                 message=error_message,
                 field=param,
-                code=f"NO_{param.upper()}"
+                code=f"400"
             )
             return jsonify({'errors': error_response}), 400
 
@@ -30,7 +30,7 @@ def tax_calculator_instructions():
         error_response = format_error(
             message=error_message,
             field="annual_income",
-            code="INVALID_ANNUAL_INCOME"
+            code="400"
         )
         return jsonify({'errors': error_response}), 400
 
@@ -40,7 +40,7 @@ def tax_calculator_instructions():
         error_response = format_error(
             message=error_message,
             field="annual_income",
-            code="SUB_ZERO_INCOME"
+            code="400"
         )
         return jsonify({'errors': error_response}), 400
 
@@ -52,7 +52,7 @@ def tax_calculator_instructions():
         error_response = format_error(
             message=error_message,
             field="tax_year",
-            code="INVALID_TAX_YEAR"
+            code="400"
         )
         return jsonify({'errors': error_response}), 400
 
@@ -62,7 +62,7 @@ def tax_calculator_instructions():
         error_response = format_error(
             message=error_message,
             field="tax_year",
-            code="TAX_YEAR_OUT_OF_RANGE"
+            code="400"
         )
         return jsonify({'errors': error_response}), 400
 
@@ -95,7 +95,7 @@ def tax_year_brackets(tax_year):
         error_response = format_error(
             message="We only support tax calculations for years: " + ", ".join(years_supported),
             field="tax_year",
-            code="UNSUPPORTED_YEAR"
+            code="404"
         )
 
         return jsonify({'errors': error_response}), 404

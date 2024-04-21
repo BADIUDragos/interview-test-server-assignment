@@ -10,6 +10,14 @@ def supported_years():
     return ['2019', '2020', '2021', '2022', '2023']
 
 
+def test_tax_calculator_post_request(client):
+    resp = client.post('/tax-calculator/')
+    assert resp.json == {'errors': [{'code': 'INTERNAL_SERVER_ERROR',
+                                     'field': '',
+                                     'message': '405 Method Not Allowed: The method is not allowed for '
+                                                'the requested URL.'}]}
+
+
 def test_tax_calculator_missing_annual_income(client):
     resp = client.get('/tax-calculator/')
     assert resp.status_code == 400
@@ -17,7 +25,7 @@ def test_tax_calculator_missing_annual_income(client):
         'errors': [{
             'field': 'annual_income',
             'message': 'Please provide annual income',
-            'code': 'NO_ANNUAL_INCOME'
+            'code': '400'
         }]
     }
 
@@ -29,7 +37,7 @@ def test_tax_calculator_missing_tax_year(client):
         'errors': [{
             'field': 'tax_year',
             'message': 'Please provide tax year',
-            'code': 'NO_TAX_YEAR'
+            'code': '400'
         }]
     }
 
@@ -41,19 +49,19 @@ def test_tax_calculator_bad_annual_income_type(client):
         'errors': [{
             'field': 'annual_income',
             'message': 'annual_income must be a number',
-            'code': 'INVALID_ANNUAL_INCOME'
+            'code': '400'
         }]
     }
 
 
-def test_tax_calculator_bad_annual_income_type(client):
+def test_tax_calculator_sub_zero_annual_incom(client):
     resp = client.get('/tax-calculator/', query_string={'annual_income': -4, 'tax_year': 2021})
     assert resp.status_code == 400
     assert resp.json == {
         'errors': [{
             'field': 'annual_income',
             'message': 'annual_income must be positive',
-            'code': 'SUB_ZERO_INCOME'
+            'code': '400'
         }]
     }
 
@@ -65,7 +73,7 @@ def test_tax_calculator_bad_tax_year(client):
         'errors': [{
             'field': 'tax_year',
             'message': 'tax_year must be a valid year',
-            'code': 'INVALID_TAX_YEAR'
+            'code': '400'
         }]
     }
 
@@ -77,7 +85,7 @@ def test_tax_calculator_year_not_supported(client):
         'errors': [{
             'field': 'tax_year',
             'message': 'tax_year must be between 2019 and 2023 inclusively',
-            'code': 'TAX_YEAR_OUT_OF_RANGE'
+            'code': '400'
         }]
     }
 
@@ -114,7 +122,7 @@ def test_tax_year_brackets_unsupported_year(client, supported_years):
     expected_result_data = format_error(
         message="We only support tax calculations for years: " + ", ".join(supported_years),
         field="tax_year",
-        code="UNSUPPORTED_YEAR"
+        code="404"
     )
 
     unsupported_year = '9999'
