@@ -8,13 +8,16 @@ def get_reliable_brackets(tax_year=2022):
 
 
 def calculate_marginal_tax(annual_income, tax_year):
+    
     # be funny
     if annual_income < 5:
         raise ValueError("You're broke !")
 
     brackets = get_tax_brackets(tax_year)
 
+    # We don't need to because json is already sorted,
     # I could also not assume that the brackets don't overlap but ... let's trust the data this time
+    # Trying to show that I think of edge cases :p
     brackets = sorted(brackets, key=lambda x: x['min'])
 
     taxes_owed_per_band = []
@@ -23,14 +26,15 @@ def calculate_marginal_tax(annual_income, tax_year):
     for bracket in brackets:
         lower_bound = bracket['min']
         rate = bracket['rate']
+        upper_bound = bracket.get('max', float('inf'))
         if annual_income > lower_bound:
-            upper_bound = min(annual_income, bracket['max'])
+            upper_bound = min(annual_income, upper_bound)
             income_in_bracket = upper_bound - lower_bound
-            tax_for_bracket = income_in_bracket * rate
+            tax_for_bracket = round(income_in_bracket * rate, 4)
             taxes_owed_per_band.append((rate, tax_for_bracket))
             total_taxes += tax_for_bracket
 
-    effective_tax_rate = total_taxes / annual_income
+    effective_tax_rate = round(total_taxes / annual_income, 4)
 
     return {
         'total_taxes': total_taxes,

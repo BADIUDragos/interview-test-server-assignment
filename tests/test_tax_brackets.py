@@ -5,8 +5,7 @@ from unittest.mock import mock_open, patch
 from api.tax_calculator.tax_brackets import get_tax_brackets
 
 
-class TestGetTaxBrackets:
-
+class TestData:
     @pytest.fixture(scope="class")
     def test_data(self):
         self.expected_data = [
@@ -16,6 +15,9 @@ class TestGetTaxBrackets:
         self.bad_year = 9999
         self.good_year = 2019
         return self
+
+
+class TestGetTaxBrackets(TestData):
 
     def test_get_tax_brackets_success(self, test_data):
 
@@ -27,8 +29,8 @@ class TestGetTaxBrackets:
             assert result == test_data.expected_data
 
     def test_get_tax_brackets_error_raised(self, test_data):
-        with pytest.raises(ValueError) as exc_info:
+        with pytest.raises(ValueError) as e:
             get_tax_brackets(test_data.bad_year)
-        assert "does not exist" in str(exc_info.value)
+        assert "does not exist" in str(e.value)
 
 
