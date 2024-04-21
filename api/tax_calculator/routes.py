@@ -18,7 +18,7 @@ def default_brackets():
 @app.route('/tax-calculator/tax-brackets/<tax_year>')
 def tax_year_brackets(tax_year):
     return jsonify({
-        'tax_brackets': controllers.get_tax_brackets(tax_year)
+        'tax_brackets': controllers.get_reliable_brackets(tax_year)
     })
 
 
