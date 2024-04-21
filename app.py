@@ -1,13 +1,8 @@
 import os
-import random
-import time
-from flask import Flask, jsonify, render_template, send_from_directory
+from flask import Flask, send_from_directory
 from flask_cors import CORS
 
 from api.error_handlers import format_error
-from api.tax_calculator.controllers import (
-    get_tax_brackets
-)
 
 
 app = Flask(__name__)
@@ -16,10 +11,12 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 CORS(app)
 
+
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
                                'favicon.ico', mimetype='image/png')
+
 
 @app.errorhandler(404)
 def not_found_handler(e):
