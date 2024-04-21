@@ -10,12 +10,6 @@ def supported_years():
     return ['2019', '2020', '2021', '2022', '2023']
 
 
-def test_tax_calculator(client):
-    resp = client.get('/tax-calculator/')
-    brackets = get_tax_brackets(2022)
-    assert resp.json == {'tax_brackets': brackets}
-
-
 def test_tax_calculator_missing_annual_income(client):
     resp = client.get('/tax-calculator/')
     assert resp.status_code == 400

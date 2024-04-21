@@ -54,7 +54,7 @@ def tax_calculator_instructions():
     return jsonify(result)
 
 
-# odd way of doing things but ok
+# odd way of doing things but ok, would probably clean realistically
 @app.route('/tax-calculator/tax-year')
 def default_brackets():
     return redirect('/')
@@ -73,7 +73,7 @@ def tax_year_brackets(tax_year):
             code="UNSUPPORTED_YEAR"
         )
 
-        abort(jsonify({'errors': error_response}), 404)
+        return jsonify({'errors': error_response}), 404
 
     return jsonify({
         'tax_brackets': controllers.get_reliable_brackets(tax_year)
