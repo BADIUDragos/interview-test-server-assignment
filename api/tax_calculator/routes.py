@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 @app.route('/tax-calculator/',  methods=['GET'])
-def tax_calculator_instructions():
+def tax_calculator():
     for param in ['annual_income', 'tax_year']:
         if request.args.get(param) is None:
             error_message = f"Please provide {param.replace('_', ' ')}"
