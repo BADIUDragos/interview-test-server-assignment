@@ -21,6 +21,7 @@ def tax_year_brackets(tax_year):
         'tax_brackets': controllers.get_tax_brackets(tax_year)
     })
 
+
 @app.route('/tax-calculator/get-tax',  methods=['GET'])
 def calculate_total_tax():
     try:
