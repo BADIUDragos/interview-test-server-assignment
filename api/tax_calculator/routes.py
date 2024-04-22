@@ -11,6 +11,14 @@ logger = logging.getLogger(__name__)
 
 @app.route('/tax-calculator/',  methods=['GET'])
 def tax_calculator():
+    """
+    Input:
+        - Query parameters:
+            - annual_income (float)
+            - tax_year (int)
+    Returns:
+        - JSON object containing calculating effective tax rate, marginal tax per tax bracket and total amount of taxes owed.
+    """
     for param in ['annual_income', 'tax_year']:
         if request.args.get(param) is None:
             error_message = f"Please provide {param.replace('_', ' ')}"
